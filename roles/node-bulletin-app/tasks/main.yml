@@ -23,7 +23,7 @@
 
 - name: retrieve battleboat code source
   git:
-    repo: https://github.com/diranetafen/node-bulletin-board.git
+    repo: https://github.com/vumay/bulletin_board_app_jenkins_CI_CD.git
     dest: "{{ home }}
     accept_hostkey: yes
     force: yes
@@ -36,10 +36,10 @@
    
 - name: Build api image and push it to Docker Hub
   docker_image:
-    path: "{{ home }}/node-bulletin-board/bulletin-board-app/"
+    path: "{{ home }}/bulletin_board_app_jenkins_CI_CD/bulletin-board-app/"
     name: "{{ docker_hub_login }}/bulletin-board-app"
     push: yes
-    tag: jenkinsCICD
+    tag: v1
   tags:
     - build
     
@@ -49,7 +49,7 @@
   docker_container:
     name: bulletin-board-app
     hostname: bulletin-board-app
-    image: bulletin-board-app:jenkinsCICD
+    image: vumay/bulletin-board-app:v1
     state: started
     ports:
       - "80:8080"

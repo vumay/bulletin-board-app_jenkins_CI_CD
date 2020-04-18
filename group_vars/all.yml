@@ -1,6 +1,6 @@
 ---
 
-bulletin-board-app_source_repo: "git@github.com:vumay/Pozos.git"
+bulletin-board-app_source_repo: "https://github.com/vumay/bulletin_board_app_jenkins_CI_CD.git"
 bulletin-board-app_source_branch: "master"
 
 bulletin-board-app_docker_image_tag: "v1"
