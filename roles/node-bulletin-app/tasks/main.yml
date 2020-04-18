@@ -28,7 +28,6 @@
     accept_hostkey: yes
     force: yes
     recursive: no
-    key_file: "{{ home }}/.ssh/id_rsa"
     version: master
   tags:
     - build
