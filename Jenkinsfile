@@ -75,7 +75,7 @@ pipeline {
                }
                stage("check deploy application") {
                    steps {
-                       sh 'ansible-playbook  -i hosts --vault-password-file vault.key --private-key id_rsa --tags "deploy" --limit prod check_bulletin_board_app.yml'
+                       sh 'ansible-playbook  -i hosts --vault-password-file vault.key --private-key id_rsa --tags "deploy" --limit prod check_deploy_app.yml'
                    }
                }
             }
