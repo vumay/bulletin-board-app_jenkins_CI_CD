@@ -17,7 +17,7 @@
     state: directory
   tags:
     - build
-    - deploy 
+    - deploy
 
 - name: copy devops private key file
   copy:
