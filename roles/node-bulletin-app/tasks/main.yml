@@ -1,6 +1,6 @@
 ---
 
-# This playbook is used to deploy bulletin board application based on Docker
+# This playbook is used to deploy student-list application based on Docker
 
 # build and push builded images
 
@@ -11,47 +11,55 @@
     password: "{{ docker_hub_password }}"
   tags:
     - build
+- name: create project directory
+  file:
+    path: "{{ home }}/node-bulletin-board"
+    state: directory
+  tags:
+    - build
+    - prod
 
-#- name: copy devops private key file
-#  copy:
-#    content: '{{ gitlab_private_key }}'
-#    dest: "{{ home }}/.ssh/id_rsa"
-#    owner: centos
-#  tags:
-#    - build
-#    - deploy
+- name: copy devops private key file
+  copy:
+    content: '{{ gitlab_private_key }}'
+    dest: "{{ home }}/.ssh/id_rsa"
+    owner: centos
+  tags:
+    - build
+    - prod
 
-- name: retrieve battleboat code source
+- name: retrieve bulletin app code source
   git:
-    repo: https://github.com/vumay/bulletin_board_app_jenkins_CI_CD.git
-    dest: "{{ home }}
+    repo: https://github.com/diranetafen/node-bulletin-board.git
+    dest: "{{ home }}/node-bulletin-board/"
     accept_hostkey: yes
     force: yes
     recursive: no
+    key_file: "{{ home }}/.ssh/id_rsa"
     version: master
   tags:
     - build
-    - deploy
-   
+    - prod
+
 - name: Build api image and push it to Docker Hub
   docker_image:
-    path: "{{ home }}/bulletin_board_app_jenkins_CI_CD/bulletin-board-app"
-    name: "{{ docker_hub_login }}/bulletin-board-app"
+    path: "{{ home }}/node-bulletin-board/"
+    name: "{{ docker_hub_login }}/bulletin-app"
     push: yes
     tag: v1
   tags:
     - build
-    
-# deploy application
 
-- name: Deploy bulletin board app
+
+# deploy api
+
+- name: Deploy mysql db
   docker_container:
-    name: bulletin-board-app
-    hostname: bulletin-board-app
-    image: vumay/bulletin-board-app:v1
+    name: bulletin-app
+    hostname: bulletin-app
+    image: vumay/bulletin-app:v1
     state: started
     ports:
       - "80:8080"
   tags:
-    - deploy
-  
+    - prod
