@@ -31,7 +31,7 @@
 - name: retrieve bulletin app code source
   git:
     repo: https://github.com/diranetafen/node-bulletin-board.git
-    dest: "{{ home }}/node-bulletin-board/"
+    dest: "{{ home }}/node-bulletin-board/bulletin-board-app/"
     accept_hostkey: yes
     force: yes
     recursive: no
@@ -53,7 +53,7 @@
 
 # deploy api
 
-- name: Deploy mysql db
+- name: bulletain application 
   docker_container:
     name: bulletin-app
     hostname: bulletin-app
