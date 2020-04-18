@@ -19,7 +19,7 @@
 
         - name: install git
           package: name=git state=present
-        tags:
+        tags: 
           - always
 
   roles:
