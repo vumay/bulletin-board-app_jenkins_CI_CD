@@ -31,7 +31,7 @@
 - name: retrieve bulletin app code source
   git:
     repo: https://github.com/diranetafen/node-bulletin-board.git
-    dest: "{{ home }}/node-bulletin-board/bulletin-board-app/"
+    dest: "{{ home }}/node-bulletin-board/"
     accept_hostkey: yes
     force: yes
     recursive: no
@@ -43,7 +43,7 @@
 
 - name: Build api image and push it to Docker Hub
   docker_image:
-    path: "{{ home }}/node-bulletin-board/"
+    path: "{{ home }}/node-bulletin-board/bulletin-board-app/"
     name: "{{ docker_hub_login }}/bulletin-app"
     push: yes
     tag: v1
