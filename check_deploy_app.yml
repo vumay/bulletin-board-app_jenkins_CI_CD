@@ -1,0 +1,10 @@
+- name: Ensure application is deployed
+  hosts: prod
+  become: true
+  tasks:
+    - block:
+        - name: Check that you can connect to webpage
+          uri:
+            url: http://3.84.22.38
+          retries: 8
+          delay: 15

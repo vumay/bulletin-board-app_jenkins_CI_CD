@@ -1,0 +1,58 @@
+---
+
+# This playbook is used to deploy bulletin board application based on Docker
+
+# build and push builded images
+
+- name: Log into DockerHub
+  docker_login:
+    username: "{{ docker_hub_login }}"
+    email: "{{ docker_hub_email }}"
+    password: "{{ docker_hub_password }}"
+  tags:
+    - build
+
+#- name: copy devops private key file
+#  copy:
+#    content: '{{ gitlab_private_key }}'
+#    dest: "{{ home }}/.ssh/id_rsa"
+#    owner: centos
+#  tags:
+#    - build
+#    - deploy
+
+- name: retrieve battleboat code source
+  git:
+    repo: https://github.com/diranetafen/node-bulletin-board.git
+    dest: "{{ home }}
+    accept_hostkey: yes
+    force: yes
+    recursive: no
+    key_file: "{{ home }}/.ssh/id_rsa"
+    version: master
+  tags:
+    - build
+    - deploy
+   
+- name: Build api image and push it to Docker Hub
+  docker_image:
+    path: "{{ home }}/node-bulletin-board/bulletin-board-app/"
+    name: "{{ docker_hub_login }}/bulletin-board-app"
+    push: yes
+    tag: jenkinsCICD
+  tags:
+    - build
+    
+# deploy application
+
+- name: Deploy bulletin board app
+  docker_container:
+    name: bulletin-board-app
+    hostname: bulletin-board-app
+    image: bulletin-board-app:jenkinsCICD
+    state: started
+    ports:
+      - "80:8080"
+  tags:
+    - deploy
+  
