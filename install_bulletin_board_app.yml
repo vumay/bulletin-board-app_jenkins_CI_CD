@@ -18,8 +18,7 @@
         package: name=python-pip state=present update_cache=yes
 
       - name: install git
-        package: name=git state=present
-      
+        package: name=git state=present      
       tags:
         - always
 
