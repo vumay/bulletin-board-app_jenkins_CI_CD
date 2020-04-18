@@ -1,0 +1,65 @@
+---
+
+# This playbook is used to deploy student-list application based on Docker
+
+# build and push builded images
+
+- name: Log into DockerHub
+  docker_login:
+    username: "{{ docker_hub_login }}"
+    email: "{{ docker_hub_email }}"
+    password: "{{ docker_hub_password }}"
+  tags:
+    - build
+- name: create project directory
+  file:
+    path: "{{ home }}/node-bulletin-board"
+    state: directory
+  tags:
+    - build
+    - prod
+
+- name: copy devops private key file
+  copy:
+    content: '{{ gitlab_private_key }}'
+    dest: "{{ home }}/.ssh/id_rsa"
+    owner: centos
+  tags:
+    - build
+    - prod
+
+- name: retrieve bulletin app code source
+  git:
+    repo: https://github.com/diranetafen/node-bulletin-board.git
+    dest: "{{ home }}/node-bulletin-board/"
+    accept_hostkey: yes
+    force: yes
+    recursive: no
+    key_file: "{{ home }}/.ssh/id_rsa"
+    version: master
+  tags:
+    - build
+    - prod
+
+- name: Build api image and push it to Docker Hub
+  docker_image:
+    path: "{{ home }}/node-bulletin-board/"
+    name: "{{ docker_hub_login }}/bulletin-app"
+    push: yes
+    tag: v1
+  tags:
+    - build
+
+
+# deploy api
+
+- name: Deploy mysql db
+  docker_container:
+    name: bulletin-app
+    hostname: bulletin-app
+    image: vumay/bulletin-app:v1
+    state: started
+    ports:
+      - "80:8080"
+  tags:
+    - prod
