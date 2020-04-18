@@ -35,7 +35,7 @@
    
 - name: Build api image and push it to Docker Hub
   docker_image:
-    path: "{{ home }}/bulletin_board_app_jenkins_CI_CD/bulletin-board-app/"
+    path: "{{ home }}/bulletin_board_app_jenkins_CI_CD/bulletin-board-app"
     name: "{{ docker_hub_login }}/bulletin-board-app"
     push: yes
     tag: v1
