@@ -1,3 +1,4 @@
+---
 - name: Ensure application is deployed
   hosts: prod
   become: true
