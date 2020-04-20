@@ -100,7 +100,6 @@ pipeline {
                        sh 'gauntlt xss.attack'
             }
         }
-    }
     post {
     always {
        script {
