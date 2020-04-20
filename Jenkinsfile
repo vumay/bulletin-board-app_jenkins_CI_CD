@@ -108,6 +108,5 @@ pipeline {
                     sh 'gauntlt xss.attack'
             }
         }
-     }
   }
 }
