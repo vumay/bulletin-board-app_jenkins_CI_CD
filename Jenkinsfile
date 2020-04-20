@@ -106,6 +106,6 @@ pipeline {
                 steps {
                     sh 'gauntlt --version'
                     sh 'gauntlt xss.attack'
+                }
             }
-        }
-}
+    }            
