@@ -65,6 +65,14 @@ pipeline {
                        sh 'ansible-playbook  -i hosts --vault-password-file vault.key --private-key id_rsa --tags "build" --limit build install_bulletin_board_app.yml'
                    }
                }
+               stage("Scan docker images on build host") {
+                   when {
+                      expression { GIT_BRANCH == 'origin/master' }
+                  }
+                   steps {
+                       sh 'ansible-playbook  -i hosts --vault-password-file vault.key --private-key id_rsa clair-scan.yml'
+                   }
+               }
                stage("Deploy app in production") {
                     when {
                        expression { GIT_BRANCH == 'origin/master' }
@@ -82,3 +90,24 @@ pipeline {
          }
       }
    }
+               stage('Find xss vulnerability') {
+                   agent { docker { 
+                         image 'gauntlt/gauntlt' 
+                         args '--entrypoint='
+                         } }
+                   steps {
+                       sh 'gauntlt --version'
+                       sh 'gauntlt xss.attack'
+            }
+        }
+    }
+    post {
+    always {
+       script {
+         /* Use slackNotifier.groovy from shared library and provide current build result as parameter */
+         clean
+         slackNotifier currentBuild.result
+     }
+    }
+    }
+}
