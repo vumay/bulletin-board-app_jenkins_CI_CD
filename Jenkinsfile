@@ -96,16 +96,14 @@ pipeline {
                }
             }
          }
-      }
-   }
-               stage('Find xss vulnerability') {
-                   agent { docker { 
-                         image 'gauntlt/gauntlt' 
-                         args '--entrypoint='
-                         } }
-                   steps {
-                       sh 'gauntlt --version'
-                       sh 'gauntlt xss.attack'
+            stage('Find xss vulnerability') {
+                agent { docker { 
+                      image 'gauntlt/gauntlt' 
+                      args '--entrypoint='
+                      } }
+                steps {
+                    sh 'gauntlt --version'
+                    sh 'gauntlt xss.attack'
             }
         }
   }
