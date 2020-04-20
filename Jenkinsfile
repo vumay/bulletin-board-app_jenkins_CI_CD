@@ -73,7 +73,7 @@ pipeline {
                        sh 'ansible-playbook  -i hosts --vault-password-file vault.key --private-key id_rsa clair-scan.yml'
                    }
                }
-                stage("Push docker images to Docker Hub") {
+                stage("docker images to Docker Hub") {
                    when {
                       expression { GIT_BRANCH == 'origin/master' }
                    }
